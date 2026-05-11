@@ -1,17 +1,17 @@
+import { useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
+  type PropsWithChildren,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-  type PropsWithChildren,
 } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import type { User } from "../types/auth.types";
+import { getMeQueryOptions } from "../api/get-me";
 import { loginUser } from "../api/login";
 import { registerUser } from "../api/register";
-import { getMeQueryOptions } from "../api/get-me";
+import type { User } from "../types/auth.types";
 
 interface AuthContextValue {
   user: User | null;
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setUser(data.user);
       queryClient.setQueryData(["auth", "me"], data.user);
     },
-    [queryClient]
+    [queryClient],
   );
 
   const register = useCallback(
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       await registerUser(name, email, password);
       await login(email, password);
     },
-    [login]
+    [login],
   );
 
   const logout = useCallback(() => {
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       register,
       logout,
     }),
-    [user, isLoading, login, register, logout]
+    [user, isLoading, login, register, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

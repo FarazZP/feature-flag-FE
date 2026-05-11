@@ -1,6 +1,6 @@
-import { cn } from "~/lib/utils";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 
 interface DataCardProps {
   title: string;
@@ -10,13 +10,7 @@ interface DataCardProps {
   headerClassName?: string;
 }
 
-export function DataCard({
-  title,
-  icon,
-  children,
-  className,
-  headerClassName,
-}: DataCardProps) {
+export function DataCard({ title, icon, children, className, headerClassName }: DataCardProps) {
   return (
     <Card className={className}>
       <CardHeader className={cn("flex flex-row items-center gap-3", headerClassName)}>

@@ -14,6 +14,6 @@ if (rootElement && !rootElement.innerHTML) {
       <Providers>
         <App />
       </Providers>
-    </StrictMode>
+    </StrictMode>,
   );
 }

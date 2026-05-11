@@ -16,17 +16,13 @@ const variantStyles: Record<StatusVariant, string> = {
   default: "bg-muted text-muted-foreground border-border",
 };
 
-export function StatusBadge({
-  variant = "default",
-  label,
-  className,
-}: StatusBadgeProps) {
+export function StatusBadge({ variant = "default", label, className }: StatusBadgeProps) {
   return (
     <span
       className={cn(
         "inline-flex items-center rounded-full border px-2.5 py-0.5 font-medium text-xs",
         variantStyles[variant],
-        className
+        className,
       )}
     >
       {label}

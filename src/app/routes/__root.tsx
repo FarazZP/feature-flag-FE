@@ -1,9 +1,9 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { DefaultErrorComponent } from "~/components/error-boundary";
-import { NotFoundComponent } from "~/components/not-found";
 import { AppShell } from "~/components/layout/app-shell";
-import { useAuthContext } from "~/features/auth/components/auth-provider";
+import { NotFoundComponent } from "~/components/not-found";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useAuthContext } from "~/features/auth/components/auth-provider";
 import type { RouterContext } from "../router";
 
 export const Route = createRootRouteWithContext<RouterContext>()({

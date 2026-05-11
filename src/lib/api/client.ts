@@ -7,10 +7,7 @@ function getToken(): string | null {
   return localStorage.getItem("auth_token");
 }
 
-export async function apiFetch<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
+export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -27,9 +24,7 @@ export async function apiFetch<T>(
   });
 
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Request failed" }));
+    const error = await response.json().catch(() => ({ message: "Request failed" }));
     throw new ApiError(response.status, error.message || "Request failed");
   }
 

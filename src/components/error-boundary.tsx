@@ -33,9 +33,7 @@ function getErrorInfo(error: unknown): ErrorInfo {
   return {
     title: "Something Went Wrong",
     message:
-      error instanceof Error
-        ? error.message
-        : "An unexpected error occurred. Please try again.",
+      error instanceof Error ? error.message : "An unexpected error occurred. Please try again.",
     icon: <AlertCircle className="h-12 w-12 text-destructive" />,
     showRetry: true,
     showHome: true,
@@ -62,9 +60,7 @@ export function DefaultErrorComponent({ error, reset }: ErrorComponentProps) {
     <div className="my-8 flex min-h-[50vh] flex-col items-center justify-center px-4">
       <div className="mx-auto max-w-md text-center">
         <div className="flex items-center justify-center">{errorInfo.icon}</div>
-        <h1 className="mt-6 font-semibold text-2xl tracking-tight">
-          {errorInfo.title}
-        </h1>
+        <h1 className="mt-6 font-semibold text-2xl tracking-tight">{errorInfo.title}</h1>
         <p className="mt-2 text-muted-foreground">{errorInfo.message}</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           {errorInfo.showRetry && (

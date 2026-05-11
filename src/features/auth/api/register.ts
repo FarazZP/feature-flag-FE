@@ -7,11 +7,7 @@ interface RegisterResponse {
   data: User;
 }
 
-export async function registerUser(
-  name: string,
-  email: string,
-  password: string
-) {
+export async function registerUser(name: string, email: string, password: string) {
   const response = await apiFetch<RegisterResponse>("/auth/register", {
     method: "POST",
     body: JSON.stringify({ name, email, password }),

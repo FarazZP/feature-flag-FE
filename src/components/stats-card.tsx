@@ -1,5 +1,5 @@
-import { cn } from "~/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { cn } from "~/lib/utils";
 
 interface StatsCardProps {
   title: string;
@@ -10,14 +10,7 @@ interface StatsCardProps {
   className?: string;
 }
 
-export function StatsCard({
-  title,
-  value,
-  description,
-  trend,
-  icon,
-  className,
-}: StatsCardProps) {
+export function StatsCard({ title, value, description, trend, icon, className }: StatsCardProps) {
   return (
     <div className={cn("rounded-xl border bg-card p-6 shadow-sm", className)}>
       <div className="flex items-center justify-between">
@@ -35,7 +28,7 @@ export function StatsCard({
             <span
               className={cn(
                 "inline-flex items-center gap-1 font-medium text-xs",
-                trend.direction === "up" ? "text-success" : "text-destructive"
+                trend.direction === "up" ? "text-success" : "text-destructive",
               )}
             >
               {trend.direction === "up" ? (
@@ -46,9 +39,7 @@ export function StatsCard({
               {trend.value}%
             </span>
           )}
-          {description && (
-            <span className="text-muted-foreground text-xs">{description}</span>
-          )}
+          {description && <span className="text-muted-foreground text-xs">{description}</span>}
         </div>
       )}
     </div>
