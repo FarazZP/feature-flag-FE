@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Building2, Plus, UserPlus, Users } from "lucide-react";
+import { Building2, Plus, UserPlus } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -11,17 +11,21 @@ import {
 import { Skeleton } from "~/components/ui/skeleton";
 import { PageHeader } from "~/components/page-header";
 import { Separator } from "~/components/ui/separator";
-import { StatusBadge } from "~/components/status-badge";
 import { useDisclosure } from "~/hooks/use-disclosure";
+import { useAuthContext } from "~/features/auth/components/auth-provider";
 import { getMyWorkspaceQueryOptions } from "../api/get-my-workspace";
+import { getMembersQueryOptions } from "../api/get-members";
 import { AddMemberDialog } from "./add-member-dialog";
 import { InviteMemberDialog } from "./invite-member-dialog";
 import { AcceptInvitationDialog } from "./accept-invitation-dialog";
 import { CreateWorkspaceDialog } from "./create-workspace-dialog";
 import { WorkspaceSetupPrompt } from "./workspace-setup-prompt";
+import { MemberList } from "./member-list";
 
 export function WorkspaceSettingsPage() {
+  const { user } = useAuthContext();
   const { data: workspace, isLoading, isError, error, refetch } = useQuery(getMyWorkspaceQueryOptions());
+  const { data: members, isLoading: membersLoading } = useQuery(getMembersQueryOptions());
 
   const createWorkspaceDisclosure = useDisclosure();
   const addMemberDisclosure = useDisclosure();
@@ -101,20 +105,25 @@ export function WorkspaceSettingsPage() {
           </div>
         </div>
 
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-              <Users className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <h4 className="mt-3 font-medium">Member list coming soon</h4>
-            <p className="mt-1 text-muted-foreground text-sm text-center max-w-sm">
-              A list endpoint is needed to display workspace members. For now, use the buttons above to add or invite members.
-            </p>
-            <div className="flex gap-2 mt-4">
-              <StatusBadge variant="info" label="API pending" />
-            </div>
-          </CardContent>
-        </Card>
+        {membersLoading ? (
+          <Card>
+            <CardContent className="py-8">
+              <div className="space-y-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} className="h-12 w-full" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ) : members && members.length > 0 ? (
+          <MemberList members={members} currentUserId={user?._id ?? ""} />
+        ) : (
+          <Card className="border-dashed">
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <p className="text-muted-foreground text-sm">No members found.</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <AddMemberDialog open={addMemberDisclosure.isOpen} onClose={addMemberDisclosure.close} />

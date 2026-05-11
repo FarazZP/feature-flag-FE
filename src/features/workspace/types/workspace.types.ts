@@ -9,11 +9,19 @@ export interface Workspace {
 export interface WorkspaceMember {
   _id: string;
   workspaceId: string;
-  userId: string;
+  userId:
+    | string
+    | {
+        _id: string;
+        name: string;
+        email: string;
+      };
   role: "owner" | "admin" | "developer" | "viewer";
   createdAt: string;
   updatedAt: string;
 }
+
+export type MemberRole = "admin" | "developer" | "viewer";
 
 export interface Invitation {
   _id: string;

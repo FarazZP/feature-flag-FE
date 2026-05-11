@@ -1,11 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Building2, Flag, LayoutDashboard } from "lucide-react";
+import { Building2, Flag, History, LayoutDashboard } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/flags", label: "Feature Flags", icon: Flag },
   { to: "/workspace", label: "Workspace", icon: Building2 },
+  { to: "/audit", label: "Audit Log", icon: History },
 ];
 
 export function AppSidebar() {
