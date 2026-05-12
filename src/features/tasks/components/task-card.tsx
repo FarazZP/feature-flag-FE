@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, Clock, AlertCircle, GripVertical, ChevronRight } from "lucide-react";
+import { CheckCircle2, Circle, Clock, AlertCircle, ChevronRight, Flag } from "lucide-react";
 import { Card, CardContent } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
@@ -53,6 +53,12 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
             <Badge variant="outline" className="text-xs">
               {PRIORITY_LABELS[task.priority]}
             </Badge>
+            {task.flagId && typeof task.flagId === "object" && (
+              <Badge variant="secondary" className="text-xs gap-1">
+                <Flag className="h-3 w-3" />
+                {task.flagId.name}
+              </Badge>
+            )}
             {task.assigneeId && typeof task.assigneeId === "object" && (
               <span className="text-muted-foreground text-xs">
                 {task.assigneeId.name}

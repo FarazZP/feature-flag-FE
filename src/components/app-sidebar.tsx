@@ -29,7 +29,7 @@ export function AppSidebar() {
           to="/dashboard"
           className="font-heading text-lg font-semibold text-sidebar-foreground"
         >
-          FeatureFlag
+          Static F.
         </Link>
       </div>
       <nav className="flex-1 p-4">

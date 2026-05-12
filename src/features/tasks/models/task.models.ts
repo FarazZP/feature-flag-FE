@@ -6,6 +6,7 @@ export const createTaskSchema = z.object({
   priority: z.enum(["low", "medium", "high", "urgent"]).optional(),
   assigneeId: z.string().optional(),
   parentId: z.string().optional(),
+  flagId: z.string().optional(),
 });
 
 export type CreateTaskFormValues = z.infer<typeof createTaskSchema>;
@@ -16,6 +17,7 @@ export const editTaskSchema = z.object({
   priority: z.enum(["low", "medium", "high", "urgent"]),
   assigneeId: z.string().optional(),
   parentId: z.string().nullable().optional(),
+  flagId: z.string().nullable().optional(),
 });
 
 export type EditTaskFormValues = z.infer<typeof editTaskSchema>;

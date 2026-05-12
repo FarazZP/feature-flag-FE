@@ -13,6 +13,7 @@ export interface UpdateTaskPayload {
   assigneeId?: string;
   status?: string;
   parentId?: string | null;
+  flagId?: string | null;
 }
 
 export async function updateTask(id: string, data: UpdateTaskPayload): Promise<Task> {

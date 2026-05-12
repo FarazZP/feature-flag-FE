@@ -12,6 +12,7 @@ export interface CreateTaskPayload {
   priority?: string;
   assigneeId?: string;
   parentId?: string;
+  flagId?: string;
 }
 
 export async function createTask(data: CreateTaskPayload): Promise<Task> {

@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { getFlagsQueryOptions } from "~/features/feature-flags/api/get-flags";
 import { getMembersQueryOptions } from "~/features/workspace/api/get-members";
 import { getTasksQueryOptions } from "../api/get-tasks";
 import { updateTask } from "../api/update-task";
@@ -37,6 +38,7 @@ export function EditTaskSheet({ open, onClose, task }: EditTaskSheetProps) {
   const queryClient = useQueryClient();
   const { data: members } = useQuery(getMembersQueryOptions());
   const { data: allTasks } = useQuery(getTasksQueryOptions());
+  const { data: flags } = useQuery(getFlagsQueryOptions());
 
   const form = useForm<EditTaskFormValues>({
     resolver: zodResolver(editTaskSchema),
@@ -46,6 +48,7 @@ export function EditTaskSheet({ open, onClose, task }: EditTaskSheetProps) {
       priority: task?.priority ?? "medium",
       assigneeId: task?.assigneeId?._id ?? "",
       parentId: task?.parentId ?? null,
+      flagId: task?.flagId?._id ?? null,
     },
   });
 
@@ -68,6 +71,7 @@ export function EditTaskSheet({ open, onClose, task }: EditTaskSheetProps) {
       priority: values.priority,
       ...(values.assigneeId ? { assigneeId: values.assigneeId } : {}),
       parentId: values.parentId ?? null,
+      flagId: values.flagId ?? null,
     });
   }
 
@@ -152,6 +156,26 @@ export function EditTaskSheet({ open, onClose, task }: EditTaskSheetProps) {
                 <SelectItem value="_none">No parent</SelectItem>
                 {filteredTasks.map((t) => (
                   <SelectItem key={t._id} value={t._id}>{t.title}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Feature Flag</Label>
+            <Select
+              value={form.watch("flagId") || "_none"}
+              onValueChange={(v) => form.setValue("flagId", v === "_none" ? null : v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Link a feature flag" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="_none">None</SelectItem>
+                {(flags ?? []).map((f) => (
+                  <SelectItem key={f._id} value={f._id}>
+                    {f.name} <code className="ml-1 text-muted-foreground text-xs">({f.key})</code>
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>

@@ -120,6 +120,16 @@ export function TaskDetailSheet({ open, onClose, task, onEdit }: TaskDetailSheet
                 </div>
               </div>
 
+              {currentTask.flagId && typeof currentTask.flagId === "object" && (
+                <div>
+                  <Label className="text-muted-foreground text-xs">Feature Flag</Label>
+                  <p className="text-sm">
+                    {currentTask.flagId.name}{" "}
+                    <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">{currentTask.flagId.key}</code>
+                  </p>
+                </div>
+              )}
+
               {currentTask.assigneeId && typeof currentTask.assigneeId === "object" && (
                 <div>
                   <Label className="text-muted-foreground text-xs">Assignee</Label>

@@ -11,6 +11,11 @@ export interface Task {
   } | null;
   workspaceId: string;
   parentId?: string | null;
+  flagId?: {
+    _id: string;
+    name: string;
+    key: string;
+  } | null;
   createdById: {
     _id: string;
     name: string;
