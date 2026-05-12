@@ -1,11 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Building2, Flag, History, LayoutDashboard } from "lucide-react";
+import { Building2, Flag, History, LayoutDashboard, ListTodo } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { useAuthContext } from "~/features/auth/components/auth-provider";
 
 const allNavItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["owner", "admin", "developer", "viewer"] as const },
   { to: "/flags", label: "Feature Flags", icon: Flag, roles: ["owner", "admin", "developer", "viewer"] as const },
+  { to: "/tasks", label: "Tasks", icon: ListTodo, roles: ["owner", "admin", "developer", "viewer"] as const },
   { to: "/workspace", label: "Workspace", icon: Building2, roles: ["owner", "admin", "developer", "viewer"] as const },
   { to: "/audit", label: "Audit Log", icon: History, roles: ["owner", "admin"] as const },
 ];
