@@ -27,6 +27,13 @@ export function WorkspaceSettingsPage() {
   const { data: workspace, isLoading, isError, error, refetch } = useQuery(getMyWorkspaceQueryOptions());
   const { data: members, isLoading: membersLoading } = useQuery(getMembersQueryOptions());
 
+  const currentUserRole =
+    members?.find((m) => {
+      const userId = typeof m.userId === "object" ? m.userId._id : m.userId;
+      return userId === user?._id;
+    })?.role ?? null;
+  const canManageMembers = currentUserRole === "owner" || currentUserRole === "admin";
+
   const createWorkspaceDisclosure = useDisclosure();
   const addMemberDisclosure = useDisclosure();
   const inviteMemberDisclosure = useDisclosure();
@@ -94,14 +101,18 @@ export function WorkspaceSettingsPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={inviteMemberDisclosure.open}>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Invite Member
-            </Button>
-            <Button size="sm" onClick={addMemberDisclosure.open}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Member
-            </Button>
+            {canManageMembers && (
+              <>
+                <Button variant="outline" size="sm" onClick={inviteMemberDisclosure.open}>
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Invite Member
+                </Button>
+                <Button size="sm" onClick={addMemberDisclosure.open}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Member
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -116,7 +127,7 @@ export function WorkspaceSettingsPage() {
             </CardContent>
           </Card>
         ) : members && members.length > 0 ? (
-          <MemberList members={members} currentUserId={user?._id ?? ""} />
+          <MemberList members={members} currentUserId={user?._id ?? ""} currentUserRole={currentUserRole} />
         ) : (
           <Card className="border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">

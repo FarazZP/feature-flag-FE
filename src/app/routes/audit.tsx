@@ -8,6 +8,9 @@ export const Route = createFileRoute("/audit")({
     if (!user) {
       throw redirect({ to: "/login", search: { redirect: "/audit" } });
     }
+    if (user.role !== "owner" && user.role !== "admin") {
+      throw redirect({ to: "/dashboard" });
+    }
     return { user };
   },
   component: AuditLogsPage,

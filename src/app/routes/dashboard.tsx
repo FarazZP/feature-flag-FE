@@ -5,10 +5,6 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { getMeQueryOptions } from "~/features/auth/api/get-me";
 import { getFlagsQueryOptions } from "~/features/feature-flags/api/get-flags";
-import { useDisclosure } from "~/hooks/use-disclosure";
-import { CreateWorkspaceDialog } from "~/features/workspace/components/create-workspace-dialog";
-import { AcceptInvitationDialog } from "~/features/workspace/components/accept-invitation-dialog";
-import { WorkspaceSetupPrompt } from "~/features/workspace/components/workspace-setup-prompt";
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async ({ context }) => {
@@ -25,39 +21,11 @@ function DashboardPage() {
   const { user } = Route.useRouteContext();
   const { data: flags } = useQuery(getFlagsQueryOptions());
 
-  const createWorkspaceDisclosure = useDisclosure();
-  const acceptInvitationDisclosure = useDisclosure();
-
   const totalFlags = flags?.length ?? 0;
   const activeFlags =
     flags?.filter(
       (f) => f.environments.development || f.environments.staging || f.environments.production,
     ).length ?? 0;
-
-  if (!user.workspaceId) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="font-heading text-3xl font-semibold">Dashboard</h1>
-          <p className="mt-1 text-muted-foreground">Welcome back, {user.name}</p>
-        </div>
-
-        <WorkspaceSetupPrompt
-          onCreateWorkspace={createWorkspaceDisclosure.open}
-          onAcceptInvitation={acceptInvitationDisclosure.open}
-        />
-
-        <CreateWorkspaceDialog
-          open={createWorkspaceDisclosure.isOpen}
-          onClose={createWorkspaceDisclosure.close}
-        />
-        <AcceptInvitationDialog
-          open={acceptInvitationDisclosure.isOpen}
-          onClose={acceptInvitationDisclosure.close}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">

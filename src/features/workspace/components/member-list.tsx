@@ -25,6 +25,7 @@ import type { WorkspaceMember, MemberRole } from "../types/workspace.types";
 interface MemberListProps {
   members: WorkspaceMember[];
   currentUserId: string;
+  currentUserRole: string | null;
 }
 
 function getUserInfo(member: WorkspaceMember) {
@@ -49,8 +50,9 @@ function roleBadge(role: string) {
   }
 }
 
-export function MemberList({ members, currentUserId }: MemberListProps) {
+export function MemberList({ members, currentUserId, currentUserRole }: MemberListProps) {
   const queryClient = useQueryClient();
+  const canManageMembers = currentUserRole === "owner" || currentUserRole === "admin";
 
   const roleMutation = useMutation({
     mutationFn: ({ id, role }: { id: string; role: MemberRole }) => updateMemberRole(id, role),
@@ -105,7 +107,7 @@ export function MemberList({ members, currentUserId }: MemberListProps) {
                   <StatusBadge variant={badge.variant} label={badge.label} />
                 </TableCell>
                 <TableCell>
-                  {!isMe && !isOwner && (
+                  {!isMe && !isOwner && canManageMembers && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-8 w-8">

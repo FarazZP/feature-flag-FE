@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useDisclosure } from "~/hooks/use-disclosure";
+import { useAuthContext } from "~/features/auth/components/auth-provider";
 import { getFlagsQueryOptions } from "../api/get-flags";
 import type { Flag as FlagType } from "../types/flag.types";
 import { CreateFlagSheet } from "./create-flag-sheet";
@@ -16,7 +17,10 @@ import { FlagDetailSheet } from "./flag-detail-sheet";
 import { FlagsTable } from "./flags-table";
 
 export function FlagsPage() {
+  const { user } = useAuthContext();
   const { data: flags, isLoading, isError, error, refetch } = useQuery(getFlagsQueryOptions());
+  const canCreate = user?.role !== "viewer";
+  const userRole = user?.role;
 
   const [selectedFlag, setSelectedFlag] = useState<FlagType | null>(null);
 
@@ -69,9 +73,11 @@ export function FlagsPage() {
           title="Feature Flags"
           description="Manage and control your feature flags across environments."
         >
-          <Button onClick={createDisclosure.open}>
-            <Plus className="mr-2 h-4 w-4" /> New Flag
-          </Button>
+          {canCreate && (
+            <Button onClick={createDisclosure.open}>
+              <Plus className="mr-2 h-4 w-4" /> New Flag
+            </Button>
+          )}
         </PageHeader>
         <Card>
           <CardHeader>
@@ -99,14 +105,17 @@ export function FlagsPage() {
         title="Feature Flags"
         description="Manage and control your feature flags across environments."
       >
-        <Button onClick={createDisclosure.open}>
-          <Plus className="mr-2 h-4 w-4" /> New Flag
-        </Button>
+        {canCreate && (
+          <Button onClick={createDisclosure.open}>
+            <Plus className="mr-2 h-4 w-4" /> New Flag
+          </Button>
+        )}
       </PageHeader>
 
       {flags && flags.length > 0 ? (
         <FlagsTable
           flags={flags}
+          userRole={userRole}
           onEdit={handleEdit}
           onDelete={handleDelete}
           onViewDetail={handleViewDetail}
@@ -119,12 +128,16 @@ export function FlagsPage() {
             </div>
             <h3 className="mt-4 font-semibold text-lg">No feature flags yet</h3>
             <p className="mt-1 text-muted-foreground text-sm">
-              Create your first feature flag to start managing rollouts.
+              {canCreate
+                ? "Create your first feature flag to start managing rollouts."
+                : "No flags have been created in this workspace yet."}
             </p>
-            <Button className="mt-6" onClick={createDisclosure.open}>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Your First Flag
-            </Button>
+            {canCreate && (
+              <Button className="mt-6" onClick={createDisclosure.open}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Your First Flag
+              </Button>
+            )}
           </CardContent>
         </Card>
       )}

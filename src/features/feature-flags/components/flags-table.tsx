@@ -20,6 +20,7 @@ import type { Flag } from "../types/flag.types";
 
 interface FlagsTableProps {
   flags: Flag[];
+  userRole?: string;
   onEdit: (flag: Flag) => void;
   onDelete: (flag: Flag) => void;
   onViewDetail: (flag: Flag) => void;
@@ -31,7 +32,9 @@ function envStatus(enabled: boolean) {
     : { variant: "default" as const, label: "OFF" };
 }
 
-export function FlagsTable({ flags, onEdit, onDelete, onViewDetail }: FlagsTableProps) {
+export function FlagsTable({ flags, userRole, onEdit, onDelete, onViewDetail }: FlagsTableProps) {
+  const canEdit = userRole !== "viewer";
+  const canDelete = userRole === "owner" || userRole === "admin";
   const columns = [
     { key: "name", label: "Name" },
     { key: "key", label: "Key" },
@@ -80,15 +83,21 @@ export function FlagsTable({ flags, onEdit, onDelete, onViewDetail }: FlagsTable
                       <Eye className="h-4 w-4" />
                       View Details
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEdit(flag)}>
-                      <Pencil className="h-4 w-4" />
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive" onClick={() => onDelete(flag)}>
-                      <Trash2 className="h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
+                    {canEdit && (
+                      <DropdownMenuItem onClick={() => onEdit(flag)}>
+                        <Pencil className="h-4 w-4" />
+                        Edit
+                      </DropdownMenuItem>
+                    )}
+                    {canDelete && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem variant="destructive" onClick={() => onDelete(flag)}>
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

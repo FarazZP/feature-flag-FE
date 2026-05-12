@@ -1,16 +1,25 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Building2, Flag, History, LayoutDashboard } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { useAuthContext } from "~/features/auth/components/auth-provider";
 
-const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/flags", label: "Feature Flags", icon: Flag },
-  { to: "/workspace", label: "Workspace", icon: Building2 },
-  { to: "/audit", label: "Audit Log", icon: History },
+const allNavItems = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["owner", "admin", "developer", "viewer"] as const },
+  { to: "/flags", label: "Feature Flags", icon: Flag, roles: ["owner", "admin", "developer", "viewer"] as const },
+  { to: "/workspace", label: "Workspace", icon: Building2, roles: ["owner", "admin", "developer", "viewer"] as const },
+  { to: "/audit", label: "Audit Log", icon: History, roles: ["owner", "admin"] as const },
 ];
+
+const canAccess = (allowedRoles: readonly string[], userRole?: string) => {
+  if (!userRole) return false;
+  return allowedRoles.includes(userRole);
+};
 
 export function AppSidebar() {
   const location = useLocation();
+  const { user } = useAuthContext();
+
+  const navItems = allNavItems.filter((item) => canAccess(item.roles, user?.role));
 
   return (
     <aside className="flex w-64 flex-col border-r bg-sidebar">
